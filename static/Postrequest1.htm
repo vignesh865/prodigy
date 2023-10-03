@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive Integration</title>
+</head>
+<body>
+    <h1>Google Drive Integration</h1>
+    
+    <!-- Button to initiate the integration -->
+    <button id="startIntegration">Start Integration</button>
+
+    <script>
+        // Define the API endpoints
+        const integrateEndpoint = "/integration/integrate?source_type=google_drive";
+        const authorizationToken = "token 0a1163a8e4d5e6b87585d537937b7c2b56cc79b6";
+
+        // Function to initiate the integration
+        document.getElementById('startIntegration').addEventListener('click', function () {
+            // Make a GET request to the first API endpoint
+            fetch(integrateEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Authorization': authorizationToken
+                }
+            })                .then(response => response.json())
+                .then(data => {
+                    if (data.code == 307) {
+                        // If the first API call is successful, redirect to the authorization URL
+                        window.location.href = data.message;
+                        return;
+                    }
+                        alert(data.message)
+                })
+                .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

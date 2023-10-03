@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integration Form</title>
+</head>
+<body>
+    <h1>Integration Form</h1>
+    <form id="integrationForm">
+        <label for="token">Authorization Token:</label>
+        <input type="text" id="token" name="token" required><br><br>
+        
+        <label for="fileId">Filre ID:</label>
+        <input type="text" id="fileId" name="fileId" required><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('integrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const token = document.getElementById('token').value;
+            const fileId = document.getElementById('fileId').value;
+
+            // Construct the URL with query parameters
+            const url = `/integration/integrate?source_type=google_drive`;
+
+            // Create a new XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+
+            // Open a POST request to the specified URL
+            xhr.open('POST', url, true);
+
+            // Set the Authorization header with the token
+            xhr.setRequestHeader('Authorization', `token ${token}`);
+
+            // Define the callback function to handle the response
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert('Integration successful!');
+
+                    alert(xhr.responseText);
+                    window.location.assign(xhr.responseText);
+
+                } else {
+                    alert('Integration failed. Please check your input and try again.');
+                }
+            };
+
+            // Create a FormData object and append the fileId
+            const formData = new FormData();
+            formData.append('fileId', fileId);
+
+            // Send the POST request with the FormData
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>

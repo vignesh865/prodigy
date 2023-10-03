@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Sources</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for styling the container */
+        .container-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="container-box p-4">
+            <h1 class="mb-4">Connected Sources</h1>
+
+            <!-- Buttons stacked vertically using Bootstrap grid system -->
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <button id="googleDriveButton" class="btn btn-primary btn-block" data-source="google_drive">Google Drive</button>
+                </div>
+                <div class="col-md-12">
+                    <button id="oneDriveButton" class="btn btn-primary btn-block" data-source="microsoft_onedrive">Microsoft OneDrive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS scripts (jQuery and Popper.js required) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to check if a source is connected
+        function isSourceConnected(source, connectedSources) {
+            return connectedSources.includes(source);
+        }
+
+        // Function to update the button state
+        function updateButtonState(buttonId, connectedSources) {
+            const button = document.getElementById(buttonId);
+            const source = button.getAttribute('data-source');
+
+            if (isSourceConnected(source, connectedSources)) {
+                // If the source is connected, disable the button and add "Connected" label
+                button.disabled = true;
+                button.innerHTML = `${button.innerHTML} (Connected)`;
+            } else {
+                // If the source is not connected, enable the button
+                button.disabled = false;
+            }
+        }
+
+        // Function to fetch the list of connected sources from the API
+        function fetchConnectedSources() {
+            // Define the Authorization token
+            const authorizationToken = "token 0a1163a8e4d5e6b87585d537937b7c2b56cc79b6";
+
+            // Make a GET request to /integration/integrate with the Authorization header
+            fetch('/integration/integrate', {
+                headers: {
+                    'Authorization': authorizationToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Extract the "sources" array from the JSON response
+                const connectedSources = data.sources;
+                // Update the button state based on the list of connected sources
+                updateButtonState('googleDriveButton', connectedSources);
+                updateButtonState('oneDriveButton', connectedSources);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Call the fetchConnectedSources function on page load
+        window.addEventListener('load', fetchConnectedSources);
+    </script>
+</body>
+</html>
