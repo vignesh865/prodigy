@@ -1,4 +1,4 @@
-const authorizationToken = "token 0a1163a8e4d5e6b87585d537937b7c2b56cc79b6";
+const authorizationToken = "token e013ba0de7a8867e31d21c112ea85b0be13a0ff7";
 
 // Function to check if a source is connected
 function isSourceConnected(source, connectedSources) {

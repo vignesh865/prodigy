@@ -1,0 +1,11 @@
+from authentication.models.tenant import Tenant
+Tenant.objects.create(tenant_name="GBC", is_active=True)
+Tenant.objects.create(tenant_name="NASA", is_active=True)
+Tenant.objects.create(tenant_name="OMUNI", is_active=True)
+
+from integration.models.source_type import SourceType
+from integration.domain_models.source_type import SourceTypeValue
+
+SourceType.objects.create(source_type=SourceTypeValue.GOOGLE_DRIVE.name, source_name=SourceTypeValue.GOOGLE_DRIVE.value, readable_name="Google Drive")
+SourceType.objects.create(source_type=SourceTypeValue.MICROSOFT_ONEDRIVE.name, source_name=SourceTypeValue.MICROSOFT_ONEDRIVE.value, readable_name="Microsoft OneDrive")
+SourceType.objects.create(source_type=SourceTypeValue.CONFLUENCE.name, source_name=SourceTypeValue.CONFLUENCE.value, readable_name="Confluence")
