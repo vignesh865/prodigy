@@ -17,3 +17,12 @@ class KnowledgeClusterView(APIView):
         tenant = AuthUtils.get_tenant(request)
         clusters_with_folder_count = KnowledgeClusterService.get_clusters_with_folder_count(tenant)
         return Response({"code": HTTPStatus.OK, "message": clusters_with_folder_count})
+
+    def post(self, request):
+        tenant = AuthUtils.get_tenant(request)
+
+        knowledge_id = request.POST.get("knowledge_id")
+
+        # List of source and data path combination.
+        data_folders = request.POST.get("data_folders")
+

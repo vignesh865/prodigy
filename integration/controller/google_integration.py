@@ -33,7 +33,7 @@ class GoogleIntegrationView(APIView):
         if action == "callback":
             return GoogleIntegrationView.oauth2callback(request)
         if action == "callback_complete":
-            return redirect(reverse('integration_index') + f"?action=callback_complete&source_type=google_drive")
+            return redirect(f"{reverse('integration_index')}?action=callback_complete&source_type=google_drive")
 
         return Response({"code": HTTPStatus.UNAUTHORIZED,
                          "message": f"Google Drive Authorization Failed"})

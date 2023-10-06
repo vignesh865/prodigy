@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from authentication.utils.auth_utils import AuthUtils
-from integration.models import SourceType
+from integration.domain_models.source_type import SourceTypeValue
 from integration.service.source_credential_service import SourceCredentialService
 
 
@@ -34,7 +34,7 @@ class SourceIntegrateView(APIView):
             return Response({"code": HTTPStatus.OK,
                              "message": f"Already connected to {source_type}"})
 
-        if source_type == SourceType.GOOGLE_DRIVE.value:
+        if source_type == SourceTypeValue.GOOGLE_DRIVE.name:
             return redirect(reverse('google-drive') + f"?action=authorize")
 
         return Response({"code": HTTPStatus.BAD_REQUEST,

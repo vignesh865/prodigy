@@ -5,6 +5,7 @@ from integration.models import SourceType
 from integration.models.knowledge_cluster import KnowledgeCluster
 
 
+# It is a combination of data path and source type. For example: , FolderA in GOOGLE_DRIVE
 class DataFolders(models.Model):
     folder_name = models.CharField(
         max_length=150,
@@ -19,13 +20,7 @@ class DataFolders(models.Model):
         blank=False
     )
 
-    source_type = models.CharField(
-        max_length=100,
-        choices=SourceType.choices,
-        null=False,
-        blank=False
-    )
-
+    source_type = models.ForeignKey(SourceType, on_delete=models.DO_NOTHING, blank=False)
     knowledge = models.ForeignKey(KnowledgeCluster, on_delete=models.DO_NOTHING, blank=False)
 
     created_by = models.ForeignKey(AppUser, on_delete=models.DO_NOTHING, blank=False)
