@@ -3,7 +3,19 @@ from enum import Enum
 from django.db import models
 
 
-class SourceType(models.TextChoices):
-    GOOGLE_DRIVE = 'google_drive'
-    MICROSOFT_ONEDRIVE = 'microsoft_onedrive'
-    CONFLUENCE = 'confluence'
+class SourceType(models.Model):
+    source_type = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False
+    )
+    source_name = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False
+    )
+    readable_name = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False
+    )

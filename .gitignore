@@ -1,4 +1,4 @@
-db.sqlite3
+pdb.sqlite3
 venv
 /resources/secrets
 .idea
