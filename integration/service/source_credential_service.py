@@ -9,7 +9,7 @@ class SourceCredentialService:
 
     @staticmethod
     def is_credentials_present(tenant_id, source_type_value):
-        source_type = SourceType.objects.get(source_type=source_type_value)
+        source_type = SourceType.objects.get(source_name=source_type_value)
         return SourceCredentials.objects.filter(tenant=tenant_id,
                                                 source_type=source_type).exists()
 
@@ -34,8 +34,8 @@ class SourceCredentialService:
     @staticmethod
     def get_all_integrated_sources(tenant_id):
         sources = [data.get('id') for data in SourceType.objects.all().values('id')]
-        values = SourceCredentials.objects.filter(tenant=tenant_id, source_type_id__in=sources).values('source_type')
-        return [data.get("source_type") for data in values]
+        values = SourceCredentials.objects.filter(tenant=tenant_id, source_type_id__in=sources)
+        return [data.source_type.source_name for data in values]
 
     @staticmethod
     def credentials_to_dict(credentials):
