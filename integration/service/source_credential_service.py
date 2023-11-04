@@ -9,7 +9,7 @@ class SourceCredentialService:
 
     @staticmethod
     def is_credentials_present(tenant_id, source_type_value):
-        source_type = SourceType.objects.get(source_name=source_type_value)
+        source_type = SourceType.objects.get(source_type=source_type_value)
         return SourceCredentials.objects.filter(tenant=tenant_id,
                                                 source_type=source_type).exists()
 
@@ -23,19 +23,20 @@ class SourceCredentialService:
     def save_credentials(tenant_id, user_id, credentials, source_type, credential_type):
         credential = SourceCredentialService.credentials_to_dict(credentials)
 
-        source_credentials = SourceCredentials.objects.create(tenant=Tenant(id=tenant_id),
-                                                              source_type=source_type,
-                                                              credential_type=credential_type,
-                                                              credential=credential,
-                                                              updated_by=AppUser(user_id))
+        source_credentials = SourceCredentials.objects.update_or_create(
+            tenant=Tenant(id=tenant_id),
+            source_type=source_type, defaults={"credential_type": credential_type,
+                                               "credential": credential,
+                                               "updated_by": AppUser(user_id)}
+        )
 
-        source_credentials.save()
+        return source_credentials
 
     @staticmethod
     def get_all_integrated_sources(tenant_id):
         sources = [data.get('id') for data in SourceType.objects.all().values('id')]
         values = SourceCredentials.objects.filter(tenant=tenant_id, source_type_id__in=sources)
-        return [data.source_type.source_name for data in values]
+        return [data.source_type.source_type for data in values]
 
     @staticmethod
     def credentials_to_dict(credentials):
@@ -45,3 +46,8 @@ class SourceCredentialService:
                 'client_id': credentials.client_id,
                 'client_secret': credentials.client_secret,
                 'scopes': credentials.scopes}
+
+    @staticmethod
+    def get_credential(tenant_id, source_type_name):
+        source_type = SourceType.objects.get(source_type=source_type_name)
+        return SourceCredentials.objects.get(tenant=tenant_id, source_type=source_type)
