@@ -1,10 +1,6 @@
-from http import HTTPStatus
-
 from django.core.exceptions import BadRequest
 from django.db.models import Count
-from rest_framework.response import Response
 
-from authentication.utils.auth_utils import AuthUtils
 from integration.convertors.data_folders_serializer import DataFoldersSerializer
 from integration.models import SourceType
 from integration.models.data_folders import DataFolders
@@ -29,7 +25,8 @@ class KnowledgeClusterService:
 
     @staticmethod
     def create_knowledge_cluster(tenant, user, cluster_name, data_folders):
-        source_name_id_dict = KnowledgeClusterService.get_source_name_id_dict([data.get("source_name") for data in data_folders])
+        source_name_id_dict = KnowledgeClusterService.get_source_name_id_dict(
+            [data.get("source_name") for data in data_folders])
         knowledge_cluster = KnowledgeCluster(cluster_name=cluster_name, tenant=tenant, created_by=user)
         knowledge_cluster.save()
 
@@ -45,8 +42,8 @@ class KnowledgeClusterService:
         data_folders_model.save()
 
         return data_folders_model.data
+
     @staticmethod
     def get_source_name_id_dict(source_names):
-        sources = SourceType.objects.filter(source_name__in = source_names)
+        sources = SourceType.objects.filter(source_name__in=source_names)
         return {data.source_name: data.id for data in sources}
-

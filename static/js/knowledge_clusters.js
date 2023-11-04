@@ -142,5 +142,43 @@ document.getElementById('backBtn').addEventListener('click', function () {
 });
 
 
+    const searchInput = $("#searchInput");
+    const suggestionList = $("#suggestionList");
+
+    searchInput.on("input", function() {
+        const searchTerm = searchInput.val();
+
+        if (searchTerm) {
+            // Make a backend API call with the user-typed search term
+            $.ajax({
+                url: `http://127.0.0.1:8080/integration/load-folders?source_type=GOOGLE_DRIVE&search_term=${searchTerm}`,
+                headers: {
+                    'Authorization': 'token e013ba0de7a8867e31d21c112ea85b0be13a0ff7'
+                },
+                success: function(response) {
+                    suggestionList.empty();
+                    if (response.code === 200) {
+                        const files = response.message.files;
+                        files.forEach(function(file) {
+                            const folderName = file.name;
+                            const listItem = $("<li class='list-group-item'></li>").text(folderName);
+                            suggestionList.append(listItem);
+                        });
+                    } else {
+                        suggestionList.append("<li class='list-group-item'>No suggestions found</li>");
+                    }
+                },
+                error: function() {
+                    suggestionList.empty();
+                    suggestionList.append("<li class='list-group-item'>Error fetching suggestions</li>");
+                }
+            });
+        } else {
+            // Clear the suggestion list if the search input is empty
+            suggestionList.empty();
+        }
+    });
+
+
 
 window.addEventListener('load', loadKnowledgeListContainer);

@@ -55,7 +55,8 @@ class GoogleIntegrationView(APIView):
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             login_hint=redirect_data.get("login_hint"),
-            include_granted_scopes='true')
+            include_granted_scopes='true',
+            approval_prompt='force')
 
         request.session['state'] = state
 
