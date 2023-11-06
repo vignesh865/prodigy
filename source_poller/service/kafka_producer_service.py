@@ -1,11 +1,12 @@
 import json
+import uuid
 
 from kafka3 import KafkaProducer
 
 
 class KafkaProducerService:
     __instance = None
-    BOOTSTRAP_SERVERS = 'localhost:1234'
+    BOOTSTRAP_SERVERS = 'localhost:9092'
 
     def __init__(self):
         if KafkaProducerService.__instance is not None:
@@ -23,8 +24,10 @@ class KafkaProducerService:
         return json.dumps(message).encode('utf-8')
 
     def send_message(self, topic, message, key=None):
-        future = self.producer.send(topic, message, key)
-        return future.get(60)
+        if not key:
+            key = str(uuid.uuid4())
+
+        return self.producer.send(topic, message, key).get(60)
 
     @staticmethod
     def get_instance(reinit=False):
