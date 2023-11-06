@@ -13,6 +13,7 @@ from source_poller.service.kafka_producer_service import KafkaProducerService
 
 class IngestionService:
     logger = logging.getLogger(__name__)
+    SOURCE_INGESTION_TOPIC = "ingest-data-source"
 
     @staticmethod
     def trigger_ingestion_for_all_tenant():
@@ -51,7 +52,7 @@ class IngestionService:
         data_folder_dict = model_to_dict(data_folder)
         for file in files:
             data_folder_dict["file"] = file
-            producer.send_message("", data_folder_dict)
+            producer.send_message(IngestionService.SOURCE_INGESTION_TOPIC, data_folder_dict)
 
     @staticmethod
     def get_ingestion_service_by_source(source_type: SourceTypeValue):
