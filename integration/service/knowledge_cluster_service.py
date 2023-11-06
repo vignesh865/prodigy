@@ -31,6 +31,7 @@ class KnowledgeClusterService:
         knowledge_cluster.save()
 
         for data in data_folders:
+            data["tenant"] = tenant.id
             data["knowledge"] = knowledge_cluster.id
             data["source_type"] = source_name_id_dict.get(data["source_name"])
             data["created_by"] = user.id
