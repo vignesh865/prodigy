@@ -1,3 +1,9 @@
 1. Add validation for knowledge cluster name. No two knowledge cluster name should have same name.
 2. Add generic exception handling class to catch the exceptions and throw it back to api in case of errors.
 3. Add tenant id in data folders.
+4. Create System creds
+5. Limit Trigger View By system creds.
+6. Create REad only models if a model is called in another module.
+   Say, Integration module's DataFolders model is called in source_poller,
+   then create read only version of DataFolders Model in source_poller module and use it.
+7. Add folder depth count and files count validation in the knowledge cluster creation time.
