@@ -1,6 +1,7 @@
 import itertools
 import logging
 
+from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.forms import model_to_dict
 
@@ -13,7 +14,7 @@ from source_poller.service.kafka_producer_service import KafkaProducerService
 
 class IngestionService:
     logger = logging.getLogger(__name__)
-    SOURCE_INGESTION_TOPIC = "ingest-data-source"
+    SOURCE_INGESTION_TOPIC = settings.SOURCE_POLLER_KAFKA_CONFIG["sourceIngestionTopic"]
 
     @staticmethod
     def trigger_ingestion_for_all_tenant():
