@@ -27,9 +27,9 @@ class IngestionService:
         data_folders = DataFolders.objects.filter(tenant_id=tenant_id).order_by('knowledge_id')
 
         for knowledge_id, group in itertools.groupby(data_folders, lambda item: item.knowledge_id):
-            logging.info(f"Started Ingestion for the cluster - {knowledge_id}")
+            IngestionService.logger.info(f"Started Ingestion for the cluster - {knowledge_id}")
             IngestionService.trigger_ingestion_for_cluster(tenant_id, list(group))
-            logging.info(f"Completed Ingestion for the cluster - {knowledge_id}")
+            IngestionService.logger.info(f"Completed Ingestion for the cluster - {knowledge_id}")
 
         logging.info(f"Completed Ingestion for the tenant - {tenant_id}")
 

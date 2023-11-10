@@ -154,10 +154,28 @@ LOGGING = {
         },
     },
 }
+KAFKA_BOOTSTRAP_SERVER = "localhost:9092"
 
 SOURCE_POLLER_KAFKA_CONFIG = {
     "kafka": {
-        'bootstrap.servers': "localhost:9092"
+        'bootstrap.servers': KAFKA_BOOTSTRAP_SERVER
     },
     "sourceIngestionTopic": "ingest-data-source"
+}
+
+SOURCE_CONSUMER_KAFKA_CONFIG = {
+
+    "ingest-data-source":
+        {
+            "kafka": {
+                'bootstrap.servers': KAFKA_BOOTSTRAP_SERVER,
+                "group.id": "ingest-data-source-python2",
+                'enable.auto.commit': 'false',
+                'auto.offset.reset': 'smallest'
+            },
+
+            "consumerTopic": "ingest-data-source",
+            "consumerCommitBatch": 2
+        }
+
 }
