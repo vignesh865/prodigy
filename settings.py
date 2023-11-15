@@ -154,10 +154,36 @@ LOGGING = {
         },
     },
 }
+KAFKA_BOOTSTRAP_SERVER = "localhost:9092"
 
 SOURCE_POLLER_KAFKA_CONFIG = {
     "kafka": {
-        'bootstrap.servers': "localhost:9092"
+        'bootstrap.servers': KAFKA_BOOTSTRAP_SERVER
     },
     "sourceIngestionTopic": "ingest-data-source"
 }
+
+SOURCE_CONSUMER_KAFKA_CONFIG = {
+
+    "ingest-data-source":
+        {
+            "kafka": {
+                'bootstrap.servers': KAFKA_BOOTSTRAP_SERVER,
+                "group.id": "ingest-data-source-python2",
+                'enable.auto.commit': 'false',
+                'auto.offset.reset': 'smallest'
+            },
+
+            "consumerTopic": "ingest-data-source",
+            "consumerCommitBatch": 2
+        }
+
+}
+
+# Dev creds, Should be removed in actual production one.
+QDRANT_DB_CONFIG = {
+    "host": "87b489ea-0d6d-47f4-bd4f-f14d5a3a28fa.us-east4-0.gcp.cloud.qdrant.io",
+    "port": 6333,
+    "api_key": "c_jnem-7h7hP4RNQACx0IhU_yCXaKGejhGHsuhk1Vp0bhfBNF2wsfw"
+}
+
