@@ -51,3 +51,8 @@ class SourceCredentialService:
     def get_credential(tenant_id, source_type_name):
         source_type = SourceType.objects.get(source_type=source_type_name)
         return SourceCredentials.objects.get(tenant=tenant_id, source_type=source_type)
+
+    @staticmethod
+    def get_credential_source_id(tenant_id, source_type_id):
+        source_type = SourceType.objects.get(id=source_type_id)
+        return SourceCredentials.objects.get(tenant=tenant_id, source_type=source_type)

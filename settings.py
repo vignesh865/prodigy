@@ -179,3 +179,11 @@ SOURCE_CONSUMER_KAFKA_CONFIG = {
         }
 
 }
+
+# Dev creds, Should be removed in actual production one.
+QDRANT_DB_CONFIG = {
+    "host": "87b489ea-0d6d-47f4-bd4f-f14d5a3a28fa.us-east4-0.gcp.cloud.qdrant.io",
+    "port": 6333,
+    "api_key": "c_jnem-7h7hP4RNQACx0IhU_yCXaKGejhGHsuhk1Vp0bhfBNF2wsfw"
+}
+
