@@ -1,25 +1,24 @@
 import io
 import logging
+import os.path
+import tempfile
 
 import google.oauth2.credentials
 import googleapiclient.discovery
-from google.api_core.exceptions import BadRequest
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 
 from integration.domain_models.source_type import SourceTypeValue
-from integration.models import SourceCredentials
 
 
 class GoogleClient:
-
     API_SERVICE_NAME = 'drive'
     API_VERSION = 'v3'
     MAX_FOLDER_DEPTH = 3
     logger = logging.getLogger(__name__)
 
     @staticmethod
-    def download_file(tenant_id, credential, file_id):
+    def download_file(tenant_id, credential, file_id, name):
         try:
             # create drive api client
             service = GoogleClient.__build_client(credential)
@@ -38,7 +37,8 @@ class GoogleClient:
                                       f" {SourceTypeValue.GOOGLE_DRIVE}, {file_id} : {error}")
             raise error
 
-        return file.getvalue()
+        saved_file_name = GoogleClient.save_file(file, name)
+        return saved_file_name
 
     @staticmethod
     def __build_client(credential):
@@ -48,3 +48,15 @@ class GoogleClient:
         return googleapiclient.discovery.build(
             GoogleClient.API_SERVICE_NAME,
             GoogleClient.API_VERSION, credentials=google_credential)
+
+    @staticmethod
+    def save_file(file_bytes: io.BytesIO, file_name: str):
+        file_name_without_ext = os.path.splitext(file_name)[0]
+        extension = os.path.splitext(file_name)[1]
+
+        temp_file = tempfile.NamedTemporaryFile(mode='wb', delete=False,
+                                                prefix=file_name_without_ext, suffix=extension)
+        temp_file.write(file_bytes.getbuffer())
+        temp_file.close()
+
+        return temp_file.name
