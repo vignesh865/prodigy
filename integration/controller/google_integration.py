@@ -16,7 +16,8 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 class GoogleIntegrationView(APIView):
     CLIENT_SECRETS_FILE = "resources/secrets/client_secret.json"
-    SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+    SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
+              "https://www.googleapis.com/auth/drive.readonly"]
     API_SERVICE_NAME = 'drive'
     API_VERSION = 'v3'
 

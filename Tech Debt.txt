@@ -7,3 +7,5 @@
    Say, Integration module's DataFolders model is called in source_poller,
    then create read only version of DataFolders Model in source_poller module and use it.
 7. Add folder depth count and files count validation in the knowledge cluster creation time.
+8. Google type document say google doc, shortcuts, etc has to be exported instead of download
+9. Check refresh token expiry after 7 days and monitor the behaviour of consumer.
