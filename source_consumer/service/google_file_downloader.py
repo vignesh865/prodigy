@@ -15,7 +15,7 @@ class GoogleFileDownloader(FileDownloader):
 
         file = GoogleClient.download_file(ingest_message.tenant, credential,
                                           file_metadata.id, file_metadata.name)
-        return file
+        return file, file_metadata.name
 
     @staticmethod
     def get_credentials(tenant_id, source_type_id):
