@@ -45,6 +45,8 @@ st.markdown(
 """
 )
 
+st.video("https://youtu.be/lSe6nAqhQ1A", start_time=0)
+
 if StreamlitService.should_authenticate(st):
     # st.button('Login', on_click=login_button)
     if st.button('Login'):
