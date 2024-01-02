@@ -4,6 +4,11 @@ import streamlit as st
 
 from query_system.service.streamlit_service import StreamlitService
 
+st.set_page_config(
+    page_icon="👋",
+    layout="wide"
+)
+
 st.title("Prodigy")
 
 if not StreamlitService.should_authenticate(st):

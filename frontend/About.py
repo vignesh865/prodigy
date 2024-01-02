@@ -6,7 +6,9 @@ from query_system.service.streamlit_service import StreamlitService
 st.set_page_config(
     page_title="Hello",
     page_icon="👋",
+    layout="wide"
 )
+
 css = '''
 <style>
     [data-testid="stSidebar"] {
