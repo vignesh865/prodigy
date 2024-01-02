@@ -23,4 +23,5 @@ urlpatterns = [
     path("integration/", include("integration.urls")),
     path("source-poller/", include("source_poller.urls")),
     path("source-consumer/", include("source_consumer.urls")),
+    path("api/", include("query_system.urls")),
 ]

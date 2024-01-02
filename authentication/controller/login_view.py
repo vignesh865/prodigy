@@ -15,4 +15,7 @@ class LoginView(APIView):
         if not user.check_password(request.data['password']):
             return Response("missing user", status=status.HTTP_404_NOT_FOUND)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user': user.username, "is_new_token": created})
+        return Response({'token': token.key,
+                         'user': user.username,
+                         "is_new_token": created,
+                         "tenant": user.tenant.id})

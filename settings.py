@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "authentication",
     "integration",
     "source_poller",
-    "source_consumer"
+    "source_consumer",
+    "query_system"
 ]
 
 STATIC_URL = '/static/'
@@ -180,10 +181,11 @@ SOURCE_CONSUMER_KAFKA_CONFIG = {
 
 }
 
-# Dev creds, Should be removed in actual production one.
+# This is Dev creds,
+# Production creds should not be committed.
 QDRANT_DB_CONFIG = {
-    "host": "c58c153e-1642-4424-81ae-efcaca631abf.us-east4-0.gcp.cloud.qdrant.io",
+    "host": "4572fa52-90e7-485b-9408-f1cd6011008e.us-east4-0.gcp.cloud.qdrant.io",
     "port": 6333,
-    "api_key": "bijxFkyjoLHcJdzsP_gEGEIM4_1F7BC1KbXrWWq0Hw7-6yjFNcqgWQ"
+    "api_key": "t4_6HG_tzKubPhn803_FOEENC2OgoHBBMnYfmCV5Dz7_Dk7ZIF2nkQ"
 }
 
