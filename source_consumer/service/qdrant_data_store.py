@@ -22,13 +22,37 @@ class QdrantDataStore(DataStore):
 
         self.vector_size = vector_size
 
+    def get_store(self, collection_name):
+        return Qdrant(self.qdrant_client, collection_name, self.embedding_model)
+
     def update_data(self, collection_name: str, chunked_docs: List[Document]):
         self.create_collection(collection_name)
-        qdrant = Qdrant(self.qdrant_client, collection_name, self.embedding_model)
+        qdrant = self.get_store(collection_name)
         return qdrant.add_documents(chunked_docs)
 
     def create_collection(self, collection_name):
+        if self.qdrant_client.get_collection(collection_name):
+            return
+
         self.qdrant_client.create_collection(
             collection_name=collection_name,
             vectors_config=models.VectorParams(size=self.vector_size, distance=models.Distance.COSINE),
         )
+
+    def get_documents(self, collection_name):
+
+        lang_documents = []
+        documents = self.qdrant_client.scroll(
+            collection_name=collection_name,
+            limit=1000,
+            with_payload=True,
+            with_vectors=False,
+        )[0]
+
+        for document in documents:
+            print(document)
+            lang_documents.append(
+                Document(metadata=document.payload.get('metadata'),
+                         page_content=document.payload.get('page_content')))
+
+        return lang_documents
