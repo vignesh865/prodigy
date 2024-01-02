@@ -22,6 +22,25 @@ class StreamlitService:
         return api_response.json()
 
     @staticmethod
+    def call_signup(username, user_password, user_email):
+        api_response = requests.post(StreamlitService.build_url("/auth/signup"), {
+            "username": username,
+            "tenant": 1,
+            "password": user_password,
+            "email": user_email})
+
+        if api_response.status_code != 200:
+            raise LoginError(api_response.text)
+
+        json_response = api_response.json()
+        return {
+            "token": json_response.get("token"),
+            "user": json_response.get("user").get("username"),
+            "is_new_token": True,
+            "tenant": json_response.get("user").get("tenant")
+        }
+
+    @staticmethod
     def check_token_status(token):
         headers = {
             "Authorization": f"token {token}"
