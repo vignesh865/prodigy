@@ -8,6 +8,9 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from integration.domain_models.source_type import SourceTypeValue
+from integration.models import SourceType
+from integration.models.redirect_state import RedirectState
 from integration.service.source_credential_service import SourceCredentialService
 
 os.environ['AUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -33,8 +36,6 @@ class GoogleIntegrationView(APIView):
             return GoogleIntegrationView.authorize(request)
         if action == "callback":
             return GoogleIntegrationView.oauth2callback(request)
-        if action == "callback_complete":
-            return redirect(f"{reverse('integration_index')}?action=callback_complete&source_type=google_drive")
 
         return Response({"code": HTTPStatus.UNAUTHORIZED,
                          "message": f"Google Drive Authorization Failed"})
@@ -59,22 +60,18 @@ class GoogleIntegrationView(APIView):
             include_granted_scopes='true',
             approval_prompt='force')
 
-        request.session['state'] = state
-
-        # return Response(authorization_url)
+        GoogleIntegrationView.save_redirect_state(state, redirect_data)
         return Response({"code": HTTPStatus.TEMPORARY_REDIRECT,
-                         "message": authorization_url})
-        # return redirect(authorization_url)
+                         "message": {"authorization_url": authorization_url, "state": state}})
 
     @staticmethod
     def oauth2callback(request):
+        state = request.query_params.get("state")
 
-        redirect_data = request.session["redirect_data"]
+        redirect_data = GoogleIntegrationView.get_redirect_data(state)
 
         if redirect_data is None:
             raise PermissionDenied()
-
-        state = request.session['state']
 
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             GoogleIntegrationView.CLIENT_SECRETS_FILE, scopes=GoogleIntegrationView.SCOPES, state=state)
@@ -88,4 +85,17 @@ class GoogleIntegrationView(APIView):
         SourceCredentialService.save_google_drive_credentials(redirect_data.get("tenant_id"),
                                                               redirect_data.get("user_id"), credentials)
 
-        return redirect(reverse('google-drive') + "?action=callback_complete")
+        return redirect(f"{reverse('integration_index')}?action=callback_complete&source_type=google_drive")
+
+    @staticmethod
+    def save_redirect_state(state, redirect_data, is_complete=False):
+        return RedirectState.objects.create(state=state,
+                                            redirect_data=redirect_data,
+                                            source_type=SourceType.objects.get(
+                                                source_type=SourceTypeValue.GOOGLE_DRIVE.name),
+                                            is_complete=is_complete
+                                            )
+
+    @staticmethod
+    def get_redirect_data(state):
+        return RedirectState.objects.get(state=state).redirect_data

@@ -44,8 +44,11 @@ class SourceIntegrateView(APIView):
     def get_redirection_data(request):
         user = AuthUtils.get_user(request)
         tenant = AuthUtils.get_tenant(request)
+        redirect_url = request.GET.get('redirect_url')
+
         return {
             "tenant_id": tenant.id,
             "user_id": user.id,
-            "login_hint": user.email
+            "login_hint": user.email,
+            "redirect_url": redirect_url
         }
