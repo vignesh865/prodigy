@@ -8,4 +8,10 @@ In this demo, we are querying 270 pages of unstructured documents loaded directl
 
 The answers for the given query and relevant context from the pdf are shown side by side in the below video(Clicking will redirect to demo video hosted in Youtube). 
 
+**_V1 Video With Single Document System:_**
+
 [![IMAGE ALT TEXT HERE](https://github.com/vignesh865/prodigy/assets/13492027/85a0d686-86b4-4651-a515-09c7be5b9c67)](https://youtu.be/lSe6nAqhQ1A)
+
+**_V3 Video with Authentication and Multi-Document System:_**
+
+[![Rag Demo V3 Thumbnail](https://github.com/vignesh865/prodigy/assets/13492027/671b2c98-6f93-4cd2-8a53-add25fd5fc90)](https://youtu.be/iYAhVAsJwRs)
